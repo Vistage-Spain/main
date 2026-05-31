@@ -25,10 +25,16 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install Anthropic SDK
+        # Only needed when ANTHROPIC_API_KEY is set; harmless otherwise.
+        run: pip install --quiet anthropic
+
       - name: Refresh videos.json
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           YT_HANDLE: "@ConorNeill"
+          # ANTHROPIC_MODEL: claude-haiku-4-5  # default; override here for sonnet/opus
         run: python scripts/refresh-videos.py
 
       - name: Commit if changed
